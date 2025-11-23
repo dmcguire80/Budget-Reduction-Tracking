@@ -3,8 +3,14 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ErrorBoundary from '@components/common/ErrorBoundary';
+import { setChartDefaults } from './config/chartDefaults';
 import './index.css';
 import App from './App.tsx';
+
+/**
+ * Initialize Chart.js defaults
+ */
+setChartDefaults();
 
 /**
  * React Query Client Configuration

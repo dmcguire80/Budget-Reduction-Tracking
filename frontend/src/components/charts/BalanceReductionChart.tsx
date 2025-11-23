@@ -8,7 +8,7 @@
 import React, { useState, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { BalanceReductionChartProps, DateRange } from '../../types/chart.types';
-import { useBalanceReductionData, useAccounts } from '../../hooks/useChartData';
+import { useBalanceReductionData } from '../../hooks/useChartData';
 import { getLineChartOptions } from '../../config/chartDefaults';
 import { getChartColors, formatCurrencyLabel } from '../../utils/chart.utils';
 import ChartLoadingSkeleton from './ChartLoadingSkeleton';
