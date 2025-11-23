@@ -13,6 +13,8 @@ import { Card, CardHeader, CardBody } from '@components/common/Card';
 import AccountTypeIcon from '@components/accounts/AccountTypeIcon';
 import AccountStats from '@components/accounts/AccountStats';
 import AccountModal from '@components/accounts/AccountModal';
+import TransactionList from '@components/transactions/TransactionList';
+import TransactionModal from '@components/transactions/TransactionModal';
 import { useAccountSummary, useDeleteAccount } from '@hooks/useAccounts';
 import { formatCurrency, formatPercentage, formatAccountType, formatDate } from '@utils/format';
 import { ROUTES, SUCCESS_MESSAGES } from '@config/constants';
@@ -21,6 +23,7 @@ const AccountDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch account summary with analytics
@@ -222,16 +225,32 @@ const AccountDetail = () => {
         />
       </div>
 
-      {/* Placeholder sections for future implementation */}
+      {/* Recent Transactions */}
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold text-gray-900">Recent Transactions</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900">Recent Transactions</h2>
+            <Button
+              variant="primary"
+              onClick={() => setIsAddTransactionModalOpen(true)}
+            >
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M12 4v16m8-8H4" />
+              </svg>
+              Add Transaction
+            </Button>
+          </div>
         </CardHeader>
         <CardBody>
-          <div className="text-center py-8 text-gray-500">
-            <p>Transaction history will be implemented by the Transactions Agent.</p>
-            <p className="text-sm mt-2">Coming soon...</p>
-          </div>
+          <TransactionList accountId={id} showFilters={true} limit={10} />
         </CardBody>
       </Card>
 
@@ -247,13 +266,21 @@ const AccountDetail = () => {
         </CardBody>
       </Card>
 
-      {/* Edit Modal */}
+      {/* Edit Account Modal */}
       <AccountModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         mode="edit"
         account={account}
         onSuccess={handleEditSuccess}
+      />
+
+      {/* Add Transaction Modal */}
+      <TransactionModal
+        isOpen={isAddTransactionModalOpen}
+        onClose={() => setIsAddTransactionModalOpen(false)}
+        mode="create"
+        accountId={id!}
       />
     </div>
   );
