@@ -1,15 +1,15 @@
 /**
- * Login Page
+ * Register Page
  *
- * User login page with form and links to register
+ * User registration page with form and links to login
  */
 
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardFooter } from '@components/common/Card';
-import LoginForm from '@components/auth/LoginForm';
+import RegisterForm from '@components/auth/RegisterForm';
 import { APP_NAME, ROUTES } from '@config/constants';
 
-const Login = () => {
+const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -30,26 +30,26 @@ const Login = () => {
               </svg>
             </div>
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">{APP_NAME}</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Create Account</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to your account to continue
+            Join {APP_NAME} and start tracking your budget reduction
           </p>
         </div>
 
-        {/* Login Card */}
+        {/* Register Card */}
         <Card>
           <CardBody>
-            <LoginForm />
+            <RegisterForm />
           </CardBody>
 
           <CardFooter className="text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Already have an account?{' '}
               <Link
-                to={ROUTES.REGISTER}
+                to={ROUTES.LOGIN}
                 className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
               >
-                Create one now
+                Sign in
               </Link>
             </p>
           </CardFooter>
@@ -58,7 +58,7 @@ const Login = () => {
         {/* Additional info */}
         <div className="text-center text-xs text-gray-500">
           <p>
-            By signing in, you agree to our{' '}
+            By creating an account, you agree to our{' '}
             <a href="#" className="text-primary-600 hover:text-primary-500">
               Terms of Service
             </a>{' '}
@@ -73,4 +73,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -5,8 +5,8 @@
  */
 
 import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
-import { API_URL, API_TIMEOUT, STORAGE_KEYS, ERROR_MESSAGES } from '@config/constants';
-import { getItem, removeItem } from '@utils/storage';
+import { API_URL, API_TIMEOUT, STORAGE_KEYS, ERROR_MESSAGES, API_ENDPOINTS } from '@config/constants';
+import { getItem, removeItem, setItem } from '@utils/storage';
 import type { ApiError } from '@types';
 
 /**
@@ -41,7 +41,16 @@ api.interceptors.request.use(
 );
 
 /**
- * Response interceptor - Handle errors
+ * Flag to prevent multiple refresh attempts
+ */
+let isRefreshing = false;
+let failedRequestsQueue: Array<{
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
+}> = [];
+
+/**
+ * Response interceptor - Handle errors and token refresh
  */
 api.interceptors.response.use(
   (response) => {
@@ -49,26 +58,102 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError<ApiError>) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+
     // Handle different error scenarios
     if (error.response) {
       const { status, data } = error.response;
 
       switch (status) {
         case 401:
-          // Unauthorized - clear auth data and redirect to login
-          removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-          removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-          removeItem(STORAGE_KEYS.USER);
+          // Check if this is a token refresh request or if we already tried to refresh
+          if (originalRequest.url?.includes('/auth/refresh') || originalRequest._retry) {
+            // Refresh failed or already retried - clear auth data and redirect to login
+            removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+            removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+            removeItem(STORAGE_KEYS.USER);
 
-          // Only redirect if not already on login page
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
+            // Only redirect if not already on login page
+            if (window.location.pathname !== '/login') {
+              window.location.href = '/login';
+            }
+
+            return Promise.reject({
+              message: data?.message || ERROR_MESSAGES.UNAUTHORIZED,
+              statusCode: 401,
+            });
           }
 
-          return Promise.reject({
-            message: data?.message || ERROR_MESSAGES.UNAUTHORIZED,
-            statusCode: 401,
-          });
+          // Try to refresh the token
+          if (!isRefreshing) {
+            isRefreshing = true;
+            originalRequest._retry = true;
+
+            try {
+              // Get refresh token
+              const refreshToken = getItem<string>(STORAGE_KEYS.REFRESH_TOKEN);
+
+              if (!refreshToken) {
+                throw new Error('No refresh token available');
+              }
+
+              // Call refresh endpoint
+              const response = await axios.post(
+                `${API_URL}${API_ENDPOINTS.AUTH.REFRESH}`,
+                { refreshToken }
+              );
+
+              const { accessToken } = response.data;
+
+              // Update access token in localStorage
+              setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+
+              // Retry all queued requests
+              failedRequestsQueue.forEach((request) => {
+                request.resolve();
+              });
+              failedRequestsQueue = [];
+
+              // Retry the original request
+              originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+              return api(originalRequest);
+            } catch (refreshError) {
+              // Refresh failed - reject all queued requests
+              failedRequestsQueue.forEach((request) => {
+                request.reject(refreshError);
+              });
+              failedRequestsQueue = [];
+
+              // Clear auth data and redirect to login
+              removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+              removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+              removeItem(STORAGE_KEYS.USER);
+
+              if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+              }
+
+              return Promise.reject({
+                message: ERROR_MESSAGES.UNAUTHORIZED,
+                statusCode: 401,
+              });
+            } finally {
+              isRefreshing = false;
+            }
+          }
+
+          // If already refreshing, queue this request
+          return new Promise((resolve, reject) => {
+            failedRequestsQueue.push({ resolve, reject });
+          })
+            .then(() => {
+              const token = getItem<string>(STORAGE_KEYS.ACCESS_TOKEN);
+              if (token) {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+              }
+              return api(originalRequest);
+            })
+            .catch((err) => Promise.reject(err));
 
         case 403:
           // Forbidden
