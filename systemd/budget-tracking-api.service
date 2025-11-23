@@ -1,0 +1,159 @@
+#
+# Budget Reduction Tracking - systemd Service Unit
+#
+# This systemd service file provides an alternative to PM2 for managing
+# the Budget Reduction Tracking backend API as a system service.
+#
+# Features:
+#   - Automatic restart on failure
+#   - Resource limits
+#   - Logging via journald
+#   - Environment file support
+#   - User/group isolation
+#   - Graceful shutdown
+#
+# Installation:
+#   1. Copy this file to systemd directory:
+#      sudo cp budget-tracking-api.service /etc/systemd/system/
+#
+#   2. Reload systemd daemon:
+#      sudo systemctl daemon-reload
+#
+#   3. Enable service to start on boot:
+#      sudo systemctl enable budget-tracking-api
+#
+#   4. Start the service:
+#      sudo systemctl start budget-tracking-api
+#
+# Management Commands:
+#   Start:    sudo systemctl start budget-tracking-api
+#   Stop:     sudo systemctl stop budget-tracking-api
+#   Restart:  sudo systemctl restart budget-tracking-api
+#   Status:   sudo systemctl status budget-tracking-api
+#   Logs:     sudo journalctl -u budget-tracking-api -f
+#   Enable:   sudo systemctl enable budget-tracking-api
+#   Disable:  sudo systemctl disable budget-tracking-api
+#
+
+[Unit]
+# Service description
+Description=Budget Reduction Tracking API Backend
+Documentation=https://github.com/dmcguire80/Budget-Reduction-Tracking
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+# Service type
+Type=simple
+
+# User and group (change 'root' to a dedicated user for better security)
+User=root
+Group=root
+
+# Working directory
+WorkingDirectory=/opt/budget-tracking/backend
+
+# Environment file (contains DATABASE_URL, JWT secrets, etc.)
+EnvironmentFile=/opt/budget-tracking/backend/.env
+
+# Additional environment variables
+Environment="NODE_ENV=production"
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+
+# Command to execute
+ExecStart=/usr/bin/node /opt/budget-tracking/backend/dist/index.js
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Start limit (prevent restart loop)
+StartLimitInterval=200
+StartLimitBurst=5
+
+# Process management
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Memory limits (adjust based on your needs)
+# MemoryMax=512M
+# MemoryHigh=400M
+
+# CPU limits (adjust based on your needs)
+# CPUQuota=100%
+
+# Security settings
+# Uncomment these for enhanced security (may require adjusting permissions)
+# NoNewPrivileges=true
+# PrivateTmp=true
+# ProtectSystem=strict
+# ProtectHome=true
+# ReadWritePaths=/opt/budget-tracking/logs
+
+# Standard output and error logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=budget-tracking-api
+
+# Logging
+# Log to systemd journal (view with: journalctl -u budget-tracking-api)
+
+[Install]
+# Start this service on multi-user boot
+WantedBy=multi-user.target
+
+#
+# Additional Notes:
+#
+# 1. Viewing Logs:
+#    - Real-time logs:        journalctl -u budget-tracking-api -f
+#    - Last 100 lines:        journalctl -u budget-tracking-api -n 100
+#    - Logs since today:      journalctl -u budget-tracking-api --since today
+#    - Logs with priority:    journalctl -u budget-tracking-api -p err
+#
+# 2. Performance Monitoring:
+#    - Resource usage:        systemctl status budget-tracking-api
+#    - Detailed status:       systemd-cgtop
+#
+# 3. Troubleshooting:
+#    - Check service status:  systemctl status budget-tracking-api
+#    - Check dependencies:    systemctl list-dependencies budget-tracking-api
+#    - Verify config:         systemd-analyze verify budget-tracking-api.service
+#
+# 4. Security Hardening:
+#    - Create dedicated user: sudo useradd -r -s /bin/false budget-tracking
+#    - Change ownership:      sudo chown -R budget-tracking:budget-tracking /opt/budget-tracking
+#    - Update User/Group in this file to 'budget-tracking'
+#    - Uncomment security settings above
+#
+# 5. Comparison with PM2:
+#
+#    systemd:
+#      Pros:  Native to Linux, better integration, journald logging, resource limits
+#      Cons:  Less feature-rich than PM2, no web dashboard, no cluster mode
+#
+#    PM2:
+#      Pros:  Cluster mode, web dashboard, easier monitoring, auto-reload
+#      Cons:  Additional dependency, requires Node.js to manage processes
+#
+#    Recommendation: Use systemd for simplicity and native integration,
+#                    use PM2 if you need cluster mode or advanced features.
+#
+# 6. Migration from PM2 to systemd:
+#    a. Stop PM2 service:         pm2 stop budget-tracking-api
+#    b. Remove from PM2:          pm2 delete budget-tracking-api
+#    c. Disable PM2 startup:      pm2 unstartup systemd
+#    d. Install systemd service:  Follow installation steps above
+#
+# 7. Migration from systemd to PM2:
+#    a. Stop systemd service:     sudo systemctl stop budget-tracking-api
+#    b. Disable systemd service:  sudo systemctl disable budget-tracking-api
+#    c. Start with PM2:           pm2 start /opt/budget-tracking/backend/dist/index.js --name budget-tracking-api
+#    d. Save PM2 config:          pm2 save
+#    e. Enable PM2 startup:       pm2 startup systemd
+#
