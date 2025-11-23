@@ -12,6 +12,7 @@ import authRouter from './routes/auth.routes';
 import accountRouter from './routes/account.routes';
 import transactionRouter from './routes/transaction.routes';
 import snapshotRouter from './routes/snapshot.routes';
+import analyticsRouter from './routes/analytics.routes';
 
 // Create Express application
 const app: Express = express();
@@ -56,7 +57,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/accounts', accountRouter);
 app.use('/api/transactions', transactionRouter);
 app.use('/api', snapshotRouter); // Snapshot routes include their own path prefixes
-// app.use('/api/analytics', analyticsRouter);
+app.use('/api/analytics', analyticsRouter);
 
 // 404 handler
 app.use(notFoundHandler);
