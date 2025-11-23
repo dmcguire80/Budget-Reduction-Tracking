@@ -18,6 +18,25 @@ export class AppError extends Error {
   }
 }
 
+// Authentication-specific error classes
+export class UnauthorizedError extends AppError {
+  constructor(message: string = 'Unauthorized') {
+    super(message, 401);
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message: string = 'Forbidden') {
+    super(message, 403);
+  }
+}
+
+export class ConflictError extends AppError {
+  constructor(message: string = 'Conflict') {
+    super(message, 409);
+  }
+}
+
 // Error response interface
 interface ErrorResponse {
   status: 'error';
@@ -31,7 +50,7 @@ export const errorHandler = (
   error: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void => {
   let statusCode = 500;
   let message = 'Internal server error';
@@ -98,7 +117,7 @@ export const errorHandler = (
 // Not found handler
 export const notFoundHandler = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   const error = new AppError(`Route ${req.originalUrl} not found`, 404);

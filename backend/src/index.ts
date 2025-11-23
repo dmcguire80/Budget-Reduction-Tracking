@@ -8,6 +8,7 @@ import { connectDatabase, disconnectDatabase } from './config/database';
 import { requestLogger } from './middleware/requestLogger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import healthRouter from './routes/health';
+import authRouter from './routes/auth.routes';
 
 // Create Express application
 const app: Express = express();
@@ -47,8 +48,8 @@ app.use(requestLogger);
 // Health check route (no /api prefix)
 app.use('/', healthRouter);
 
-// API routes will be added here
-// app.use('/api/auth', authRouter);
+// API routes
+app.use('/api/auth', authRouter);
 // app.use('/api/accounts', accountRouter);
 // app.use('/api/transactions', transactionRouter);
 // app.use('/api/snapshots', snapshotRouter);

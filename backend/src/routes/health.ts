@@ -7,7 +7,7 @@ const router = Router();
 // Health check endpoint
 router.get(
   '/health',
-  asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  asyncHandler(async (_req: Request, res: Response): Promise<void> => {
     const timestamp = new Date().toISOString();
 
     try {
