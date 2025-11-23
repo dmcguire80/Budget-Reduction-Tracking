@@ -36,3 +36,9 @@ coverage/
 # Prisma
 *.db
 *.db-journal
+
+# Prisma seed compiled files
+prisma/seed.js
+prisma/seed.js.map
+prisma/seed.d.ts
+prisma/seed.d.ts.map
