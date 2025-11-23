@@ -53,10 +53,13 @@ Budget Reduction Tracking helps you take control of your debt by providing:
 - RESTful API design
 
 ### Infrastructure
-- Docker & Docker Compose
+- Proxmox LXC containers
 - PostgreSQL 16 database
-- Nginx reverse proxy
-- Proxmox VE deployment ready
+- Nginx web server
+- PM2 process management
+- Nginx Proxy Manager (reverse proxy)
+- Cloudflare CDN/DNS
+- UniFi network gateway
 
 ## Project Status
 
@@ -92,30 +95,50 @@ This project is being actively developed by a team of specialized AI agents, eac
 ## Quick Start
 
 ### Prerequisites
-- Docker & Docker Compose
-- Node.js 20+ (for local development)
-- PostgreSQL 16 (or use Docker)
+
+**For Production (Proxmox LXC)**
+- Proxmox VE cluster
+- Nginx Proxy Manager (separate LXC)
+- Cloudflare account
+- UniFi network controller
+
+**For Local Development**
+- Node.js 20 LTS
+- PostgreSQL 16 (or Docker for PostgreSQL only)
+- Git
 
 ### Installation
 
+**Local Development**
 ```bash
 # Clone the repository
 git clone https://github.com/dmcguire80/Budget-Reduction-Tracking.git
 cd Budget-Reduction-Tracking
 
-# Start with Docker Compose (easiest)
-docker-compose up -d
+# Setup script (handles PostgreSQL, dependencies, migrations)
+./scripts/setup-dev.sh
 
-# Or run locally
+# Or manual setup:
 # Backend
 cd backend
 npm install
-npm run dev
+cp .env.example .env
+# Edit .env with your database connection
+npx prisma migrate dev
+npm run dev  # Runs on port 3001
 
-# Frontend (in another terminal)
+# Frontend (new terminal)
 cd frontend
 npm install
-npm run dev
+cp .env.example .env
+npm run dev  # Runs on port 5173
+```
+
+**Production Deployment (Proxmox LXC)**
+```bash
+# See detailed guide in docs/DEPLOYMENT.md
+# Quick deploy script:
+./scripts/deploy-lxc.sh
 ```
 
 ### Environment Configuration
@@ -147,14 +170,22 @@ See `.env.example` files in `backend/` and `frontend/` directories for required 
 
 ## Deployment
 
-Designed for deployment on Proxmox VE cluster:
+Designed for deployment on Proxmox VE cluster using LXC containers:
 
-```bash
-# Production deployment
-docker-compose -f docker-compose.prod.yml up -d
+**Architecture**:
+```
+Internet → Cloudflare → UniFi Gateway → NPM (LXC) → App (LXC)
 ```
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed Proxmox setup instructions (coming soon).
+**Quick Deploy**:
+```bash
+# Full automated deployment script
+./scripts/deploy-lxc.sh
+
+# Or follow manual steps in docs/DEPLOYMENT.md
+```
+
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for complete Proxmox LXC setup, NPM configuration, Cloudflare DNS, and UniFi port forwarding instructions (coming soon).
 
 ## Development
 

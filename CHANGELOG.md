@@ -9,12 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial project setup
-- Architecture documentation
-- Agent task delegation system
+- Comprehensive architecture documentation (ARCHITECTURE.md)
+- Agent task delegation system (AGENTS.md)
 - Project README and documentation structure
 - Directory structure for frontend, backend, and infrastructure
-- Contributing guidelines
+- Contributing guidelines (CONTRIBUTING.md)
+- Quick start guide for developers (QUICK_START.md)
+- External access setup guide (docs/EXTERNAL_ACCESS.md)
 - MIT License
+
+### Architecture
+- **LXC Deployment Strategy**: Native Proxmox LXC containers (not Docker)
+- **Process Management**: PM2 for Node.js backend
+- **Web Server**: Nginx for frontend static files
+- **Reverse Proxy**: Nginx Proxy Manager (separate LXC)
+- **CDN/DNS**: Cloudflare integration
+- **Network**: UniFi gateway configuration
+- **Database**: Native PostgreSQL 16 service
+- **SSL/TLS**: Let's Encrypt via NPM
+- Complete external access stack documentation
+
+### Changed
+- Deployment strategy from Docker to LXC containers
+- Agent 1 tasks updated for LXC deployment focus
+- Production deployment uses native services (not containers)
+- Development workflow supports both native PostgreSQL and Docker (optional)
 
 ### Project Structure
 - `/backend` - Node.js + Express + TypeScript + Prisma

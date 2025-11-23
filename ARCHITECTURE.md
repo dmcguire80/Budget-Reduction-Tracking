@@ -291,54 +291,332 @@ function calculatePayoffProjection(
 
 ## Deployment Architecture
 
-### Docker Compose Structure
-```yaml
-services:
-  frontend:
-    - Nginx serving React build
-    - Port 80/443
+### LXC Container on Proxmox
 
-  backend:
-    - Node.js Express API
-    - Port 3001 (internal)
+**Deployment Strategy**: Single LXC container with all services running natively (not Docker)
 
-  database:
-    - PostgreSQL 16
-    - Port 5432 (internal only)
-    - Persistent volume
+#### LXC Container Specifications
+- **OS**: Ubuntu 22.04 LTS or Debian 12
+- **CPU**: 2-4 cores
+- **RAM**: 4-8 GB
+- **Storage**: 20-50 GB (depending on data volume)
+- **Networking**: Bridge to network with static IP
 
-  nginx-proxy:
-    - Reverse proxy
-    - SSL termination
-    - Load balancing ready
+#### Service Architecture
+```
+LXC Container (budget-tracking)
+├── Nginx (Frontend)
+│   ├── Serves React production build
+│   ├── Port 3000 (internal)
+│   └── Reverse proxy to backend API
+├── Node.js Backend (systemd service)
+│   ├── Express API
+│   ├── Port 3001 (internal)
+│   └── Connects to PostgreSQL
+├── PostgreSQL 16 (systemd service)
+│   ├── Database server
+│   ├── Port 5432 (localhost only)
+│   └── Data directory: /var/lib/postgresql
+└── Application Files
+    ├── /opt/budget-tracking/frontend/dist
+    ├── /opt/budget-tracking/backend
+    └── /opt/budget-tracking/.env
 ```
 
-### Proxmox Deployment
-1. Create LXC container or VM
-2. Install Docker and Docker Compose
-3. Clone repository
-4. Configure environment variables
-5. Run `docker-compose up -d`
-6. Configure firewall rules
-7. Set up SSL certificates
-8. Configure backups
+#### External Access Stack
+```
+Internet
+  ↓
+Cloudflare (DNS + DDoS Protection)
+  ↓
+UniFi Gateway/Firewall (Port Forwarding: 80, 443)
+  ↓
+Nginx Proxy Manager (Proxmox LXC)
+  ↓ (Reverse Proxy + SSL)
+Budget Tracking App (Proxmox LXC)
+  ↓
+budget-tracking.yourdomain.com
+```
+
+### Proxmox LXC Setup Steps
+
+1. **Create LXC Container**
+   ```bash
+   # In Proxmox shell
+   pct create <VMID> local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst \
+     --hostname budget-tracking \
+     --memory 4096 \
+     --cores 2 \
+     --net0 name=eth0,bridge=vmbr0,ip=192.168.1.X/24,gw=192.168.1.1 \
+     --storage local-lvm \
+     --rootfs local-lvm:20
+   ```
+
+2. **Configure LXC Features**
+   - Enable nesting if needed: `pct set <VMID> -features nesting=1`
+   - Start container: `pct start <VMID>`
+
+3. **Install Required Packages**
+   ```bash
+   # Inside LXC container
+   apt update && apt upgrade -y
+   apt install -y curl git nginx postgresql postgresql-contrib \
+     build-essential certbot python3-certbot-nginx
+
+   # Install Node.js 20 LTS
+   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+   apt install -y nodejs
+
+   # Install PM2 for process management
+   npm install -g pm2
+   ```
+
+4. **Setup PostgreSQL**
+   ```bash
+   sudo -u postgres psql
+   CREATE DATABASE budget_tracking;
+   CREATE USER budget_user WITH ENCRYPTED PASSWORD 'secure_password';
+   GRANT ALL PRIVILEGES ON DATABASE budget_tracking TO budget_user;
+   \q
+   ```
+
+5. **Deploy Application**
+   ```bash
+   # Clone repository
+   cd /opt
+   git clone https://github.com/dmcguire80/Budget-Reduction-Tracking.git budget-tracking
+   cd budget-tracking
+
+   # Backend setup
+   cd backend
+   npm install
+   cp .env.example .env
+   # Edit .env with production settings
+   npx prisma migrate deploy
+   npm run build
+
+   # Frontend setup
+   cd ../frontend
+   npm install
+   cp .env.example .env
+   # Edit .env with production settings
+   npm run build
+   ```
+
+6. **Configure PM2 for Backend**
+   ```bash
+   cd /opt/budget-tracking/backend
+   pm2 start dist/index.js --name budget-tracking-api
+   pm2 save
+   pm2 startup  # Follow instructions to enable on boot
+   ```
+
+7. **Configure Nginx**
+   - See detailed configuration in DEPLOYMENT.md
+   - Serves frontend on port 3000
+   - Proxies /api to backend on 3001
+
+### Nginx Proxy Manager (NPM) Configuration
+
+**Assumption**: NPM is running in separate LXC container on Proxmox
+
+#### NPM Proxy Host Setup
+1. **Add Proxy Host** in NPM web interface
+   - Domain: `budget-tracking.yourdomain.com`
+   - Scheme: `http`
+   - Forward Hostname/IP: `192.168.1.X` (Budget Tracking LXC IP)
+   - Forward Port: `3000`
+   - Cache Assets: ✓
+   - Block Common Exploits: ✓
+   - Websockets Support: ✓
+
+2. **SSL Configuration** in NPM
+   - SSL Certificate: Let's Encrypt
+   - Force SSL: ✓
+   - HTTP/2 Support: ✓
+   - HSTS Enabled: ✓
+   - HSTS Subdomains: ✓
+
+3. **Advanced Configuration** (Optional)
+   ```nginx
+   # Custom Nginx Configuration in NPM
+   client_max_body_size 10M;
+   proxy_connect_timeout 600;
+   proxy_send_timeout 600;
+   proxy_read_timeout 600;
+   send_timeout 600;
+   ```
+
+### Cloudflare Configuration
+
+1. **DNS Records**
+   ```
+   Type: A
+   Name: budget-tracking
+   Content: <Your-Public-IP>
+   Proxy: ✓ (Orange Cloud)
+   TTL: Auto
+   ```
+
+2. **Cloudflare Settings**
+   - SSL/TLS Mode: Full (Strict)
+   - Always Use HTTPS: On
+   - Automatic HTTPS Rewrites: On
+   - Minimum TLS Version: 1.2
+   - TLS 1.3: Enabled
+
+3. **Security Settings**
+   - Security Level: Medium
+   - Challenge Passage: 30 minutes
+   - Browser Integrity Check: On
+   - WAF Rules: Configure as needed
+
+### UniFi Network Configuration
+
+1. **Port Forwarding Rules**
+   - Name: HTTP
+   - From: WAN
+   - Port: 80
+   - Forward IP: <NPM-LXC-IP>
+   - Forward Port: 80
+   - Protocol: TCP
+
+   - Name: HTTPS
+   - From: WAN
+   - Port: 443
+   - Forward IP: <NPM-LXC-IP>
+   - Forward Port: 443
+   - Protocol: TCP
+
+2. **Firewall Rules** (Optional)
+   - Create rule to allow only Cloudflare IPs
+   - Reduces direct exposure to internet
+
+3. **Local DNS** (Optional)
+   - Add local DNS record for budget-tracking.yourdomain.com
+   - Points to NPM LXC internal IP
+   - Allows local network access without hairpinning
+
+### Backup Strategy
+
+1. **LXC Container Backup** (Proxmox)
+   - Datacenter → Backup → Add
+   - Schedule: Daily at 2 AM
+   - Mode: Snapshot
+   - Compression: ZSTD
+   - Retention: 7 days
+
+2. **Database Backup** (Inside LXC)
+   ```bash
+   # Automated backup script (in /opt/budget-tracking/scripts/backup-db.sh)
+   pg_dump -U budget_user budget_tracking | gzip > /backups/budget_tracking_$(date +%Y%m%d_%H%M%S).sql.gz
+
+   # Cron job (daily at 3 AM)
+   0 3 * * * /opt/budget-tracking/scripts/backup-db.sh
+   ```
+
+3. **Application Files Backup**
+   - Git repository keeps code safe
+   - Backup .env files separately (secure location)
+   - Document restore procedures
+
+### Monitoring & Maintenance
+
+1. **PM2 Monitoring**
+   ```bash
+   pm2 status
+   pm2 logs budget-tracking-api
+   pm2 monit
+   ```
+
+2. **System Resources**
+   ```bash
+   htop
+   df -h
+   free -h
+   ```
+
+3. **PostgreSQL Health**
+   ```bash
+   sudo -u postgres psql -c "SELECT version();"
+   sudo -u postgres psql -c "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;"
+   ```
+
+4. **Nginx Logs**
+   ```bash
+   tail -f /var/log/nginx/access.log
+   tail -f /var/log/nginx/error.log
+   ```
+
+### Update Procedure
+
+1. **Pull Latest Code**
+   ```bash
+   cd /opt/budget-tracking
+   git pull origin main
+   ```
+
+2. **Update Backend**
+   ```bash
+   cd backend
+   npm install
+   npx prisma migrate deploy
+   npm run build
+   pm2 restart budget-tracking-api
+   ```
+
+3. **Update Frontend**
+   ```bash
+   cd frontend
+   npm install
+   npm run build
+   # Nginx automatically serves new build
+   ```
+
+4. **Verify Deployment**
+   ```bash
+   pm2 status
+   curl http://localhost:3000
+   curl http://localhost:3001/api/health
+   ```
 
 ## Development Workflow
 
 ### Local Development
+
+**Option 1: Native PostgreSQL**
 ```bash
+# Install PostgreSQL locally
+# macOS: brew install postgresql
+# Ubuntu: apt install postgresql
+# Start PostgreSQL service
+
 # Backend
 cd backend
 npm install
-npm run dev  # Watch mode
+cp .env.example .env
+# Configure DATABASE_URL in .env
+npx prisma migrate dev
+npm run dev  # Watch mode on port 3001
 
-# Frontend
+# Frontend (new terminal)
 cd frontend
 npm install
-npm run dev  # Vite dev server
+cp .env.example .env
+npm run dev  # Vite dev server on port 5173
+```
 
-# Database
-docker-compose up db  # PostgreSQL only
+**Option 2: Docker PostgreSQL Only** (Optional for development)
+```bash
+# Start PostgreSQL in Docker
+docker run -d \
+  --name budget-tracking-db \
+  -e POSTGRES_PASSWORD=dev_password \
+  -e POSTGRES_DB=budget_tracking \
+  -p 5432:5432 \
+  postgres:16
+
+# Then follow backend/frontend steps from Option 1
 ```
 
 ### Database Migrations

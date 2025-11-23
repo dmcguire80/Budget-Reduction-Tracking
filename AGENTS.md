@@ -9,71 +9,165 @@ This document outlines the tasks to be completed by development agents. Each age
 ## 🏗️ Agent 1: Infrastructure & DevOps Engineer
 
 ### Primary Responsibilities
-Set up the development and deployment infrastructure for the application.
+Set up LXC deployment infrastructure and automation for Proxmox deployment.
 
 ### Tasks
 
-#### 1. Docker Configuration
-- [ ] Create `Dockerfile` for backend (Node.js)
-  - Multi-stage build for production
-  - Non-root user for security
-  - Health check configuration
-- [ ] Create `Dockerfile` for frontend (React/Nginx)
-  - Build stage with Node.js
-  - Production stage with Nginx
-  - Optimized nginx.conf
-- [ ] Create `docker-compose.yml` for local development
-  - Backend service
-  - Frontend service
-  - PostgreSQL database service
-  - Volume mounts for persistence
-  - Environment variable configuration
-  - Health checks for all services
-- [ ] Create `docker-compose.prod.yml` for production deployment
-  - Production-optimized settings
-  - Nginx reverse proxy service
-  - SSL/TLS configuration ready
-  - Resource limits
+#### 1. LXC Deployment Configuration
+- [ ] Create `lxc/` directory with deployment resources
+- [ ] Create `lxc/setup-lxc.sh` script for LXC container setup
+  - Automated LXC creation command
+  - Package installation (Node.js, PostgreSQL, Nginx, PM2)
+  - PostgreSQL initialization
+  - User and permission setup
+- [ ] Create `lxc/nginx-site.conf` template
+  - Frontend serving on port 3000
+  - Reverse proxy to backend API on port 3001
+  - Security headers
+  - Gzip compression
+  - Static file caching
+- [ ] Create `lxc/pm2-ecosystem.config.js`
+  - PM2 process configuration for backend
+  - Environment variables
+  - Restart policies
+  - Log configuration
 
 #### 2. Environment Configuration
 - [ ] Create `.env.example` files for both frontend and backend
-- [ ] Document all required environment variables
-- [ ] Create `.gitignore` with appropriate exclusions
-- [ ] Set up .dockerignore files
+  - Document all required environment variables
+  - Production vs development settings
+  - Database connection strings
+  - JWT secrets
+  - CORS origins
+- [ ] Update `.gitignore` with appropriate exclusions
+  - node_modules, .env, logs, build artifacts
+- [ ] Create `config/` directory with:
+  - `production.env.template` - Production environment template
+  - `development.env.template` - Development environment template
 
-#### 3. Database Setup
-- [ ] Configure PostgreSQL in Docker Compose
-- [ ] Set up persistent volume for database
-- [ ] Create initialization scripts if needed
-- [ ] Document backup and restore procedures
-
-#### 4. Deployment Documentation
-- [ ] Create `DEPLOYMENT.md` with:
-  - Proxmox VM/LXC setup instructions
-  - Docker installation steps
-  - Application deployment steps
-  - SSL certificate setup (Let's Encrypt)
-  - Firewall configuration
-  - Backup procedures
-  - Update/rollback procedures
-
-#### 5. Development Scripts
-- [ ] Create `scripts/` directory with:
-  - `dev-setup.sh` - Initial development environment setup
+#### 3. Deployment Scripts
+- [ ] Create `scripts/` directory with automation scripts:
+  - `setup-dev.sh` - Local development environment setup
+    - PostgreSQL setup
+    - Install dependencies
+    - Run migrations
+    - Seed database
+  - `deploy-lxc.sh` - Full LXC deployment script
+    - Clone repository
+    - Install dependencies
+    - Build frontend and backend
+    - Configure Nginx
+    - Setup PM2
+    - Start services
   - `backup-db.sh` - Database backup script
+    - pg_dump with compression
+    - Timestamped backups
+    - Retention policy
   - `restore-db.sh` - Database restore script
-  - `deploy.sh` - Deployment automation script
+    - Restore from backup file
+    - Verification steps
+  - `update-app.sh` - Application update script
+    - Pull latest code
+    - Install dependencies
+    - Run migrations
+    - Build and restart services
+  - `health-check.sh` - System health monitoring
+    - Check backend API
+    - Check database connection
+    - Check Nginx status
+    - Check disk space
+
+#### 4. Comprehensive Deployment Documentation
+- [ ] Create `docs/DEPLOYMENT.md` with complete guide:
+  - **Proxmox LXC Setup**
+    - LXC container creation commands
+    - Resource specifications (CPU, RAM, storage)
+    - Network configuration
+    - Container features (nesting if needed)
+  - **System Package Installation**
+    - Node.js 20 LTS setup
+    - PostgreSQL 16 installation
+    - Nginx configuration
+    - PM2 global installation
+  - **Application Deployment**
+    - Repository cloning
+    - Backend setup and build
+    - Frontend setup and build
+    - Database initialization
+    - PM2 configuration
+    - Nginx site configuration
+  - **Nginx Proxy Manager (NPM) Configuration**
+    - Creating proxy host
+    - SSL/TLS certificate setup (Let's Encrypt)
+    - Custom Nginx configurations
+    - WebSocket support if needed
+  - **Cloudflare Configuration**
+    - DNS record setup
+    - SSL/TLS mode (Full Strict)
+    - Security settings
+    - WAF rules
+    - Page rules (optional)
+  - **UniFi Network Configuration**
+    - Port forwarding (80, 443)
+    - Firewall rules
+    - Local DNS setup (optional)
+    - Cloudflare IP whitelist (optional)
+  - **Backup and Restore Procedures**
+    - LXC snapshot backups via Proxmox
+    - Database backups (automated cron job)
+    - Application file backups
+    - Restore procedures
+  - **Monitoring and Maintenance**
+    - PM2 monitoring commands
+    - Log locations and management
+    - System resource monitoring
+    - Database maintenance
+  - **Update and Rollback Procedures**
+    - Safe update process
+    - Testing after updates
+    - Rollback procedure if needed
+
+#### 5. Systemd Service Files (Alternative to PM2)
+- [ ] Create `systemd/budget-tracking-api.service`
+  - Systemd service for backend API
+  - Auto-restart configuration
+  - Logging setup
+  - Environment file loading
+- [ ] Document both PM2 and systemd approaches
+  - Pros and cons of each
+  - Migration between them
+
+#### 6. Monitoring and Logging Setup
+- [ ] Create `scripts/setup-logging.sh`
+  - Log rotation configuration
+  - PM2 log management
+  - Nginx log configuration
+- [ ] Create `scripts/monitor.sh`
+  - System resource monitoring
+  - Service health checks
+  - Alert notifications (optional)
 
 ### Deliverables
-- Complete Docker setup
-- Development and production configurations
-- Deployment documentation
-- Automation scripts
+- Complete LXC deployment scripts and configuration
+- Comprehensive deployment documentation
+- Nginx configuration for frontend and API proxy
+- PM2 ecosystem configuration
+- Backup and restore automation scripts
+- Update and maintenance scripts
+- NPM, Cloudflare, and UniFi setup guides
 
 ### Integration Points
-- Backend agent: Docker container specifications
-- Database agent: PostgreSQL version and configuration
-- Frontend agent: Build process requirements
+- Backend agent: PM2 process management, build process
+- Database agent: PostgreSQL configuration and initialization
+- Frontend agent: Nginx serving configuration, build process
+- Documentation agent: DEPLOYMENT.md integration
+
+### Notes
+- **No Docker**: This deployment uses native LXC containers on Proxmox
+- **PM2 for Process Management**: Backend runs as PM2 process with auto-restart
+- **Nginx for Frontend**: Serves React production build and proxies API calls
+- **Native PostgreSQL**: Database runs as system service in LXC
+- **External Access**: Cloudflare → UniFi → NPM → App LXC
 
 ---
 

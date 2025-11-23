@@ -1,37 +1,53 @@
-# Docker Configuration
+# Docker Configuration (Optional - Development Only)
 
-Docker and Docker Compose configurations for Budget Reduction Tracking.
+**Note**: This project deploys to **Proxmox LXC** in production, NOT Docker.
 
-## Agent Responsible
+Docker configurations here are **optional** and only for local development convenience.
 
-- **Agent 1**: Infrastructure & DevOps Engineer
+## Purpose
 
-## Files
-
-- `Dockerfile.backend` - Backend container
-- `Dockerfile.frontend` - Frontend container
-- `docker-compose.yml` - Development environment
-- `docker-compose.prod.yml` - Production environment
-- `nginx.conf` - Nginx configuration for frontend
+Provides Docker Compose setup for running PostgreSQL during local development if you don't want to install PostgreSQL natively.
 
 ## Usage
 
-### Development
+### PostgreSQL Only (Recommended for Development)
 ```bash
+# Start just PostgreSQL in Docker
+docker run -d \
+  --name budget-tracking-db \
+  -e POSTGRES_PASSWORD=dev_password \
+  -e POSTGRES_DB=budget_tracking \
+  -e POSTGRES_USER=budget_user \
+  -p 5432:5432 \
+  postgres:16
+
+# Stop and remove
+docker stop budget-tracking-db
+docker rm budget-tracking-db
+```
+
+### Full Stack (Alternative - Not Used in Production)
+```bash
+# Optional docker-compose for full local development
 docker-compose up -d
+
+# This is NOT how the app is deployed in production
+# Production uses LXC containers on Proxmox
 ```
 
-### Production
-```bash
-docker-compose -f docker-compose.prod.yml up -d
-```
+## Production Deployment
 
-## Services
+**DO NOT USE DOCKER FOR PRODUCTION**
 
-- **frontend**: React app served by Nginx (port 80/443)
-- **backend**: Node.js Express API (port 3001, internal)
-- **db**: PostgreSQL 16 (port 5432, internal)
+Production deployment uses:
+- Proxmox LXC containers
+- Native Node.js with PM2
+- Native PostgreSQL service
+- Native Nginx web server
 
-## Agent Tasks
+See [../docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for production deployment guide.
 
-Refer to [AGENTS.md](../AGENTS.md) for detailed task assignments.
+## Files in This Directory
+
+- `docker-compose.yml` - Optional PostgreSQL for development (if created)
+- This directory may remain mostly empty as Docker is not used in production
