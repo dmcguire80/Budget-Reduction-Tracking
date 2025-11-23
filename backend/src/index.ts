@@ -9,6 +9,9 @@ import { requestLogger } from './middleware/requestLogger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth.routes';
+import accountRouter from './routes/account.routes';
+import transactionRouter from './routes/transaction.routes';
+import snapshotRouter from './routes/snapshot.routes';
 
 // Create Express application
 const app: Express = express();
@@ -50,9 +53,9 @@ app.use('/', healthRouter);
 
 // API routes
 app.use('/api/auth', authRouter);
-// app.use('/api/accounts', accountRouter);
-// app.use('/api/transactions', transactionRouter);
-// app.use('/api/snapshots', snapshotRouter);
+app.use('/api/accounts', accountRouter);
+app.use('/api/transactions', transactionRouter);
+app.use('/api', snapshotRouter); // Snapshot routes include their own path prefixes
 // app.use('/api/analytics', analyticsRouter);
 
 // 404 handler

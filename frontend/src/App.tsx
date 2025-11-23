@@ -12,6 +12,7 @@ import Dashboard from '@pages/Dashboard';
 import Login from '@pages/Login';
 import Register from '@pages/Register';
 import Accounts from '@pages/Accounts';
+import AccountDetail from '@pages/AccountDetail';
 import NotFound from '@pages/NotFound';
 import { ROUTES } from '@config/constants';
 
@@ -35,7 +36,7 @@ function App() {
             <Route path={ROUTES.HOME} element={<Dashboard />} />
             <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
             <Route path={ROUTES.ACCOUNTS} element={<Accounts />} />
-            <Route path="/accounts/:id" element={<Accounts />} /> {/* Placeholder - will be implemented by Agent 8 */}
+            <Route path="/accounts/:id" element={<AccountDetail />} />
             <Route path={ROUTES.TRANSACTIONS} element={<Accounts />} /> {/* Placeholder - will be implemented by Agent 9 */}
             <Route path={ROUTES.ANALYTICS} element={<Dashboard />} /> {/* Placeholder - will be implemented by Agent 11 */}
             <Route path={ROUTES.PROFILE} element={<Dashboard />} /> {/* Placeholder */}
