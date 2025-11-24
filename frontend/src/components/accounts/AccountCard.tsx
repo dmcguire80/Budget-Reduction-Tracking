@@ -9,7 +9,7 @@ import { Card, CardBody, CardFooter } from '@components/common/Card';
 import AccountTypeIcon from './AccountTypeIcon';
 import { formatCurrency, formatPercentage, formatAccountType } from '@utils/format';
 import { ROUTES } from '@config/constants';
-import type { Account } from '@types';
+import type { Account } from '@/types';
 import clsx from 'clsx';
 
 export interface AccountCardProps {

@@ -10,7 +10,7 @@ import * as authService from '@services/auth.service';
 import { getItem } from '@utils/storage';
 import { STORAGE_KEYS, ROUTES } from '@config/constants';
 import { isTokenExpired } from '@utils/token';
-import type { User, AuthContextType } from '@types/auth';
+import type { User, AuthContextType } from '@/types/auth';
 
 /**
  * Auth Context

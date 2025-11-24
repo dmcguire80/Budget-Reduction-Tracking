@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
-import type { AlertType } from '@types';
+import type { AlertType } from '@/types';
 
 export interface ErrorMessageProps {
   message: string;

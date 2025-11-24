@@ -5,7 +5,7 @@
  */
 
 import clsx from 'clsx';
-import { AccountType } from '@types';
+import { AccountType } from '@/types';
 
 export interface AccountTypeIconProps {
   accountType: AccountType;

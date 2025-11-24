@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import accountService from '@services/account.service';
-import type { AccountFilters, AccountFormData } from '@types/account.types';
+import type { AccountFilters, AccountFormData } from '@/types/account.types';
 
 /**
  * Fetch all accounts with optional filters

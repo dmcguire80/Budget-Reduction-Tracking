@@ -6,7 +6,7 @@
 
 import { InputHTMLAttributes, forwardRef } from 'react';
 import clsx from 'clsx';
-import type { InputType } from '@types';
+import type { InputType } from '@/types';
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;

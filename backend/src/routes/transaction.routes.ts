@@ -18,7 +18,7 @@ router.use(requireAuth);
  * @desc    Get all transactions for authenticated user across all accounts
  * @access  Protected
  */
-router.get('/', asyncHandler(transactionController.getAllTransactions));
+router.get('/transactions', asyncHandler(transactionController.getAllTransactions));
 
 /**
  * @route   GET /api/accounts/:accountId/transactions
@@ -47,7 +47,7 @@ router.post(
  * @access  Protected
  */
 router.put(
-  '/:id',
+  '/transactions/:id',
   validate(updateTransactionSchema),
   asyncHandler(transactionController.updateTransaction)
 );
@@ -57,6 +57,6 @@ router.put(
  * @desc    Delete transaction
  * @access  Protected
  */
-router.delete('/:id', asyncHandler(transactionController.deleteTransaction));
+router.delete('/transactions/:id', asyncHandler(transactionController.deleteTransaction));
 
 export default router;

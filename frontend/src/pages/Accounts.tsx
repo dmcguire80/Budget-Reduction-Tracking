@@ -12,7 +12,7 @@ import ErrorMessage from '@components/common/ErrorMessage';
 import AccountCard from '@components/accounts/AccountCard';
 import AccountModal from '@components/accounts/AccountModal';
 import { useAccounts } from '@hooks/useAccounts';
-import { AccountType } from '@types';
+import { AccountType } from '@/types';
 import { ACCOUNT_TYPES } from '@config/constants';
 import { formatAccountType } from '@utils/format';
 

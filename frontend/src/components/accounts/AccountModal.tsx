@@ -8,7 +8,7 @@ import Modal from '@components/common/Modal';
 import AccountForm from './AccountForm';
 import { useCreateAccount, useUpdateAccount } from '@hooks/useAccounts';
 import { AccountFormValues } from '@validators/account.schemas';
-import type { Account } from '@types/account.types';
+import type { Account } from '@/types/account.types';
 import { SUCCESS_MESSAGES } from '@config/constants';
 
 export interface AccountModalProps {

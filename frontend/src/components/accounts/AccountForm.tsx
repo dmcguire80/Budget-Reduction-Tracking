@@ -10,9 +10,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '@components/common/Input';
 import Button from '@components/common/Button';
 import { accountSchema, AccountFormValues } from '@validators/account.schemas';
-import { AccountType } from '@types';
+import { AccountType } from '@/types';
 import { ACCOUNT_TYPES } from '@config/constants';
-import type { Account } from '@types/account.types';
+import type { Account } from '@/types/account.types';
 
 export interface AccountFormProps {
   account?: Account;

@@ -11,7 +11,7 @@ import { VALIDATION } from '@config/constants';
  * Transaction type enum schema
  */
 export const transactionTypeSchema = z.enum(['PAYMENT', 'CHARGE', 'ADJUSTMENT', 'INTEREST'], {
-  errorMap: () => ({ message: 'Please select a valid transaction type' }),
+  message: 'Please select a valid transaction type',
 });
 
 /**
@@ -20,15 +20,14 @@ export const transactionTypeSchema = z.enum(['PAYMENT', 'CHARGE', 'ADJUSTMENT', 
 export const transactionSchema = z.object({
   amount: z
     .number({
-      required_error: 'Amount is required',
-      invalid_type_error: 'Amount must be a number',
+      message: 'Amount is required',
     })
     .positive('Amount must be positive')
     .max(999999999.99, 'Amount is too large'),
   transactionType: transactionTypeSchema,
   transactionDate: z
     .union([z.string(), z.date()], {
-      errorMap: () => ({ message: 'Valid date is required' }),
+      message: 'Valid date is required',
     })
     .refine(
       (val) => {
@@ -52,8 +51,7 @@ export const transactionSchema = z.object({
 export const quickTransactionSchema = z.object({
   amount: z
     .number({
-      required_error: 'Amount is required',
-      invalid_type_error: 'Amount must be a number',
+      message: 'Amount is required',
     })
     .positive('Amount must be positive')
     .max(999999999.99, 'Amount is too large'),

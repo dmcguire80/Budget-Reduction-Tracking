@@ -5,7 +5,7 @@
  */
 
 import { z } from 'zod';
-import { AccountType } from '@types';
+import { AccountType } from '@/types';
 
 /**
  * Account schema for create/update operations
@@ -18,14 +18,12 @@ export const accountSchema = z.object({
     .trim(),
 
   accountType: z.nativeEnum(AccountType, {
-    required_error: 'Account type is required',
-    invalid_type_error: 'Invalid account type',
+    message: 'Account type is required',
   }),
 
   currentBalance: z
     .number({
-      required_error: 'Current balance is required',
-      invalid_type_error: 'Current balance must be a number',
+      message: 'Current balance is required',
     })
     .min(0, 'Current balance cannot be negative'),
 
@@ -37,8 +35,7 @@ export const accountSchema = z.object({
 
   interestRate: z
     .number({
-      required_error: 'Interest rate is required',
-      invalid_type_error: 'Interest rate must be a number',
+      message: 'Interest rate is required',
     })
     .min(0, 'Interest rate cannot be negative')
     .max(100, 'Interest rate cannot exceed 100%'),

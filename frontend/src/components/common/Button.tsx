@@ -6,7 +6,7 @@
 
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import clsx from 'clsx';
-import type { ButtonVariant, ButtonSize } from '@types';
+import type { ButtonVariant, ButtonSize } from '@/types';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;

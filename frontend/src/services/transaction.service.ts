@@ -10,7 +10,6 @@ import type {
   Transaction,
   TransactionFormData,
   TransactionFilters,
-  TransactionResponse,
 } from '@/types/transaction.types';
 
 /**

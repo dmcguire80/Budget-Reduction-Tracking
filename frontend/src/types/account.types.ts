@@ -4,7 +4,7 @@
  * TypeScript interfaces and types for account management
  */
 
-import { Account, AccountType } from './index';
+import type { Account, AccountType } from './index';
 
 /**
  * Account form data for creating/updating accounts

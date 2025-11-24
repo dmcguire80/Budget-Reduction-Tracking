@@ -7,7 +7,7 @@
 import { useMemo } from 'react';
 import clsx from 'clsx';
 import { VALIDATION } from '@config/constants';
-import type { PasswordStrength, PasswordStrengthResult } from '@types/auth';
+import type { PasswordStrength, PasswordStrengthResult } from '@/types/auth';
 
 export interface PasswordStrengthIndicatorProps {
   password: string;

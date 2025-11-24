@@ -6,8 +6,8 @@
  */
 
 import { format, parseISO } from 'date-fns';
-import { AccountType, Snapshot } from '../types';
-import {
+import type { AccountType, Snapshot } from '../types';
+import type {
   ChartData,
   ChartDataset,
   BalanceDataPoint,
@@ -55,7 +55,7 @@ export function getColorForUtilization(percentage: number): string {
  */
 export function transformToChartData(
   snapshots: Snapshot[],
-  initialBalance?: number
+  _initialBalance?: number
 ): ChartData {
   if (!snapshots || snapshots.length === 0) {
     return { labels: [], datasets: [] };
@@ -196,7 +196,7 @@ export function generateMultiAccountDatasets(
     snapshots: Snapshot[];
   }>
 ): ChartDataset[] {
-  return accountData.map((account, index) => {
+  return accountData.map((account, _index) => {
     const sorted = [...account.snapshots].sort(
       (a, b) =>
         new Date(a.snapshotDate).getTime() - new Date(b.snapshotDate).getTime()

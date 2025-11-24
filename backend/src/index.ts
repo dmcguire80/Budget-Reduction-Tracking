@@ -55,7 +55,7 @@ app.use('/', healthRouter);
 // API routes
 app.use('/api/auth', authRouter);
 app.use('/api/accounts', accountRouter);
-app.use('/api/transactions', transactionRouter);
+app.use('/api', transactionRouter); // Transaction routes include their own path prefixes
 app.use('/api', snapshotRouter); // Snapshot routes include their own path prefixes
 app.use('/api/analytics', analyticsRouter);
 

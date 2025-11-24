@@ -14,7 +14,7 @@ import type {
   AuthResponse,
   RefreshResponse,
   User,
-} from '@types/auth';
+} from '@/types/auth';
 
 /**
  * Register a new user

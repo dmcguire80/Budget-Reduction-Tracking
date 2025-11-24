@@ -7,7 +7,7 @@
 import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { API_URL, API_TIMEOUT, STORAGE_KEYS, ERROR_MESSAGES, API_ENDPOINTS } from '@config/constants';
 import { getItem, removeItem, setItem } from '@utils/storage';
-import type { ApiError } from '@types';
+import type { ApiError } from '@/types';
 
 /**
  * Create Axios instance with base configuration

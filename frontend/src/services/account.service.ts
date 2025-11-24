@@ -14,7 +14,7 @@ import type {
   AccountResponse,
   AccountSummaryResponse,
   AccountDeleteResponse,
-} from '@types/account.types';
+} from '@/types/account.types';
 
 /**
  * Fetch all user accounts with optional filters

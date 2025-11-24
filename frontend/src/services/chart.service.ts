@@ -10,7 +10,6 @@ import {
   DateRange,
   PaymentScenario,
   BalanceDataPoint,
-  InterestDataPoint,
   PaymentDistribution,
   ProgressDataPoint,
   ProjectionDataPoint,

@@ -4,7 +4,8 @@
  * TypeScript interfaces and types for chart components and data visualization
  */
 
-import { ChartOptions as ChartJsOptions } from 'chart.js';
+// Chart.js types are available when needed
+// import type { ChartOptions as ChartJsOptions } from 'chart.js';
 
 /**
  * Date range for chart filtering
@@ -42,9 +43,10 @@ export interface ChartDataset {
 }
 
 /**
- * Chart options extending Chart.js options
+ * Chart options (simplified, compatible with Chart.js)
+ * For full Chart.js options, use ChartJsOptions directly
  */
-export interface ChartOptions extends ChartJsOptions {
+export interface ChartOptions {
   responsive: boolean;
   maintainAspectRatio: boolean;
   plugins?: {
