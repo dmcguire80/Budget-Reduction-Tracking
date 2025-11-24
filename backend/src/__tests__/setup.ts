@@ -31,12 +31,13 @@ afterAll(async () => {
   console.log('Test database disconnected');
 });
 
-// Suppress console logs during tests
+// Suppress console logs during tests (keep error for debugging)
+const noop = () => {};
 global.console = {
   ...console,
-  log: jest.fn(),
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
+  log: noop,
+  debug: noop,
+  info: noop,
+  warn: noop,
   // Keep error for debugging
 };
