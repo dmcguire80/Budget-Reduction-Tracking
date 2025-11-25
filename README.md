@@ -107,13 +107,29 @@ This project has been successfully developed by a team of specialized AI agents.
 
 ## Quick Start
 
+### One-Liner Install (Proxmox LXC)
+
+Deploy to a Proxmox LXC container with a single command:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dmcguire80/Budget-Reduction-Tracking/main/install.sh)"
+```
+
+This automatically installs and configures:
+- Node.js 20 LTS + PM2
+- PostgreSQL 16 with database setup
+- Nginx web server
+- Application build and deployment
+- Systemd services and backups
+
 ### Prerequisites
 
 **For Production (Proxmox LXC)**
 - Proxmox VE cluster
+- Ubuntu 22.04/24.04 or Debian 11/12 LXC container
 - Nginx Proxy Manager (separate LXC)
-- Cloudflare account
-- UniFi network controller
+- Cloudflare account (optional)
+- UniFi network controller (optional)
 
 **For Local Development**
 - Node.js 20 LTS
