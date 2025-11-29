@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Future changes will be documented here -->
 
+## [1.0.1] - 2025-11-29
+
+### Fixed
+- **Critical**: Fixed bash syntax errors in `install.sh` (lines 232, 254)
+  - Changed JavaScript ternary operators to proper bash conditionals
+  - Installation now completes successfully without syntax errors
+- Added curl installation check to ensure curl is available before script downloads
+
+### Added
+- **proxmox-install.sh**: New one-liner installer that runs from Proxmox host
+  - Automatically creates LXC container with optimal settings
+  - Auto-detects next available VMID
+  - Uses DHCP for automatic IP assignment
+  - Displays container IP and access URL after installation
+- Updated README with prominent Proxmox one-liner installation instructions
+
+### Changed
+- Reorganized README Quick Start section to highlight Proxmox deployment
+
 ## [1.0.0] - 2025-11-24
 
 ### Added - Phase 1: Foundation
