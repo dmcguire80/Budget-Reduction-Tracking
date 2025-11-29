@@ -107,33 +107,52 @@ This project has been successfully developed by a team of specialized AI agents.
 
 ## Quick Start
 
-### One-Liner Install (Proxmox LXC)
+### 🚀 One-Command Proxmox Install (Recommended)
 
-Deploy to a Proxmox LXC container with a single command:
+Deploy to Proxmox with a single command that creates the LXC container and installs everything:
+
+```bash
+# SSH into your Proxmox host and run:
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dmcguire80/Budget-Reduction-Tracking/main/proxmox-install.sh)"
+```
+
+**This command will:**
+- ✅ Create a new LXC container automatically (VMID auto-assigned)
+- ✅ Configure with 4GB RAM, 4 cores, 20GB disk, DHCP networking
+- ✅ Install Node.js 20, PostgreSQL 16, Nginx, PM2
+- ✅ Build and deploy the application
+- ✅ Start all services
+- ✅ Display the container IP and access URL
+
+**Installation takes ~5-10 minutes.** Access the app at `http://[container-ip]:3000` when complete.
+
+---
+
+### 📦 Manual LXC Install
+
+If you already have an LXC container set up, run this inside it:
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/dmcguire80/Budget-Reduction-Tracking/main/install.sh)"
 ```
 
-This automatically installs and configures:
-- Node.js 20 LTS + PM2
-- PostgreSQL 16 with database setup
-- Nginx web server
-- Application build and deployment
-- Systemd services and backups
+---
 
 ### Prerequisites
 
-**For Production (Proxmox LXC)**
-- Proxmox VE cluster
+**For Proxmox Deployment**
+- Proxmox VE 7.0+ host
+- Ubuntu 22.04 LXC template (script will download if missing)
+- Network connectivity
+
+**For Manual LXC**
 - Ubuntu 22.04/24.04 or Debian 11/12 LXC container
-- Nginx Proxy Manager (separate LXC)
-- Cloudflare account (optional)
-- UniFi network controller (optional)
+- Root or sudo access
+- Internet connectivity
 
 **For Local Development**
 - Node.js 20 LTS
-- PostgreSQL 16 (or Docker for PostgreSQL only)
+- PostgreSQL 16 (or Docker)
 - Git
 
 ### Installation

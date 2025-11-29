@@ -126,9 +126,15 @@ esac
 log_step "Updating system packages"
 apt update && apt upgrade -y
 
+# Install curl first if not present (needed for this script to be downloaded)
+if ! command -v curl &> /dev/null; then
+    log_info "Installing curl..."
+    apt install -y curl
+fi
+
 # Install dependencies
 log_step "Installing system dependencies"
-apt install -y curl wget git build-essential ca-certificates gnupg lsb-release \
+apt install -y wget git build-essential ca-certificates gnupg lsb-release \
     vim htop net-tools ufw unzip
 
 # Install Node.js 20 LTS
@@ -221,6 +227,13 @@ if [ "$SKIP_DB" = false ]; then
     source /root/.budget-tracking/credentials
 fi
 
+# Set CORS origin based on mode
+if [ "$MODE" = "production" ]; then
+    CORS_ORIGIN="https://budget.yourdomain.com"
+else
+    CORS_ORIGIN="http://localhost:5173"
+fi
+
 cat > "$INSTALL_DIR/backend/.env" <<EOF
 NODE_ENV=${MODE}
 PORT=3001
@@ -229,7 +242,7 @@ JWT_SECRET=$(openssl rand -base64 32)
 JWT_EXPIRES_IN=15m
 REFRESH_TOKEN_SECRET=$(openssl rand -base64 32)
 REFRESH_TOKEN_EXPIRES_IN=7d
-CORS_ORIGIN=${MODE == "production" ? "https://budget.yourdomain.com" : "http://localhost:5173"}
+CORS_ORIGIN=${CORS_ORIGIN}
 EOF
 
 # Run database migrations
@@ -250,8 +263,16 @@ npm install
 
 # Configure frontend environment
 log_step "Configuring frontend environment"
+
+# Set API URL based on mode
+if [ "$MODE" = "production" ]; then
+    VITE_API_URL="https://budget.yourdomain.com/api"
+else
+    VITE_API_URL="http://localhost:3001"
+fi
+
 cat > "$INSTALL_DIR/frontend/.env" <<EOF
-VITE_API_URL=${MODE == "production" ? "https://budget.yourdomain.com/api" : "http://localhost:3001"}
+VITE_API_URL=${VITE_API_URL}
 VITE_APP_NAME=Budget Reduction Tracker
 EOF
 
