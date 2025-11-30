@@ -227,9 +227,15 @@ if [ "$SKIP_DB" = false ]; then
     source /root/.budget-tracking/credentials
 fi
 
-# Set CORS origin based on mode
+# Set CORS origin based on mode and environment
 if [ "$MODE" = "production" ]; then
-    CORS_ORIGIN="https://budget.yourdomain.com"
+    # Use container IP if available (Proxmox deployment)
+    if [ -n "$CONTAINER_IP" ]; then
+        CORS_ORIGIN="http://$CONTAINER_IP:3000"
+        log_info "Container deployment - CORS origin: $CORS_ORIGIN"
+    else
+        CORS_ORIGIN="https://budget.yourdomain.com"
+    fi
 else
     CORS_ORIGIN="http://localhost:5173"
 fi
