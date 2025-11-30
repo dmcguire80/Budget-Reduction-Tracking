@@ -32,6 +32,35 @@
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   }
 
+  .dark {
+    /* Color variables for dark theme */
+    --color-primary: 139 157 255;
+    --color-secondary: 148 163 184;
+    --color-success: 74 222 128;
+    --color-danger: 248 113 113;
+    --color-warning: 251 191 36;
+    --color-info: 56 189 248;
+
+    /* Background colors */
+    --bg-primary: 17 24 39;
+    --bg-secondary: 31 41 55;
+    --bg-tertiary: 55 65 81;
+
+    /* Text colors */
+    --text-primary: 243 244 246;
+    --text-secondary: 209 213 219;
+    --text-tertiary: 156 163 175;
+
+    /* Border colors */
+    --border-primary: 55 65 81;
+    --border-secondary: 75 85 99;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  }
+
   /* Font imports */
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 

@@ -6,6 +6,7 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@context/AuthContext';
+import { ThemeProvider } from '@context/ThemeContext';
 import ProtectedRoute from '@components/auth/ProtectedRoute';
 import AppLayout from '@components/layout/AppLayout';
 import Dashboard from '@pages/Dashboard';
@@ -19,7 +20,8 @@ import { ROUTES } from '@config/constants';
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
         <Routes>
           {/* Public routes (no layout) */}
           <Route path={ROUTES.LOGIN} element={<Login />} />
@@ -47,7 +49,8 @@ function App() {
           <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
