@@ -11,7 +11,7 @@ import { APP_NAME, ROUTES } from '@config/constants';
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Logo and Title */}
         <div className="text-center">
@@ -30,8 +30,8 @@ const Login = () => {
               </svg>
             </div>
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">{APP_NAME}</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Sign in to your account to continue
           </p>
         </div>
@@ -43,11 +43,11 @@ const Login = () => {
           </CardBody>
 
           <CardFooter className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
               <Link
                 to={ROUTES.REGISTER}
-                className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+                className="font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 transition-colors"
               >
                 Create one now
               </Link>
@@ -56,14 +56,14 @@ const Login = () => {
         </Card>
 
         {/* Additional info */}
-        <div className="text-center text-xs text-gray-500">
+        <div className="text-center text-xs text-gray-500 dark:text-gray-400">
           <p>
             By signing in, you agree to our{' '}
-            <a href="#" className="text-primary-600 hover:text-primary-500">
+            <a href="#" className="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className="text-primary-600 hover:text-primary-500">
+            <a href="#" className="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300">
               Privacy Policy
             </a>
           </p>

@@ -32,7 +32,7 @@ export const Card = ({ children, noPadding = false, className, ...props }: CardP
   return (
     <div
       className={clsx(
-        'bg-white rounded-lg shadow-md border border-gray-200',
+        'bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700',
         { 'p-0': noPadding },
         className
       )}
@@ -49,7 +49,7 @@ export const Card = ({ children, noPadding = false, className, ...props }: CardP
 export const CardHeader = ({ children, className, ...props }: CardHeaderProps) => {
   return (
     <div
-      className={clsx('px-6 py-4 border-b border-gray-200', className)}
+      className={clsx('px-6 py-4 border-b border-gray-200 dark:border-gray-700', className)}
       {...props}
     >
       {children}
@@ -77,7 +77,7 @@ export const CardBody = ({ children, noPadding = false, className, ...props }: C
 export const CardFooter = ({ children, className, ...props }: CardFooterProps) => {
   return (
     <div
-      className={clsx('px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg', className)}
+      className={clsx('px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-b-lg', className)}
       {...props}
     >
       {children}
