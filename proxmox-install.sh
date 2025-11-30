@@ -95,7 +95,8 @@ fi
 log_step "Finding available container ID"
 
 VMID=100
-while pvesh get /cluster/resources | grep -q "\"vmid\":$VMID"; do
+while pct list | awk 'NR>1 {print $1}' | grep -q "^${VMID}$" || \
+      qm list | awk 'NR>1 {print $1}' | grep -q "^${VMID}$"; do
     VMID=$((VMID + 1))
 done
 
