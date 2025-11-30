@@ -95,8 +95,10 @@ fi
 log_step "Finding available container ID"
 
 VMID=100
-while pct list | awk 'NR>1 {print $1}' | grep -q "^${VMID}$" || \
-      qm list | awk 'NR>1 {print $1}' | grep -q "^${VMID}$"; do
+# Get all VMIDs from cluster (both VMs and LXC containers on all nodes)
+USED_VMIDS=$(pvesh get /cluster/resources --output-format json | grep -oP '"vmid":\K\d+' | sort -n)
+
+while echo "$USED_VMIDS" | grep -q "^${VMID}$"; do
     VMID=$((VMID + 1))
 done
 
