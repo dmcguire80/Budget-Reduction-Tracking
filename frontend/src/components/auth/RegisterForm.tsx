@@ -72,19 +72,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         error={errors.name?.message}
         autoComplete="name"
         required
-        icon={
-          <svg
-            className="w-5 h-5 text-gray-400"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        }
       />
 
       {/* Email field */}
@@ -96,19 +83,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         error={errors.email?.message}
         autoComplete="email"
         required
-        icon={
-          <svg
-            className="w-5 h-5 text-gray-400"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-          </svg>
-        }
       />
 
       {/* Password field */}
@@ -121,19 +95,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           error={errors.password?.message}
           autoComplete="new-password"
           required
-          icon={
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          }
         />
 
         {/* Show/Hide password toggle */}
@@ -159,19 +120,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           error={errors.confirmPassword?.message}
           autoComplete="new-password"
           required
-          icon={
-            <svg
-              className="w-5 h-5 text-gray-400"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
         />
 
         {/* Show/Hide confirm password toggle */}

@@ -94,7 +94,7 @@ fi
 # Find next available VMID
 log_step "Finding available container ID"
 
-VMID=200
+VMID=100
 while pvesh get /cluster/resources --type vm | grep -q "\"vmid\":$VMID"; do
     VMID=$((VMID + 1))
 done
@@ -195,23 +195,23 @@ echo "  • IP Address: $CONTAINER_IP"
 echo ""
 
 log_info "Application Access:"
-echo "  • Frontend: ${CYAN}http://$CONTAINER_IP:3000${NC}"
-echo "  • Backend API: ${CYAN}http://$CONTAINER_IP:3001${NC}"
-echo "  • Health Check: ${CYAN}http://$CONTAINER_IP:3001/health${NC}"
+echo -e "  • Frontend: ${CYAN}http://$CONTAINER_IP:3000${NC}"
+echo -e "  • Backend API: ${CYAN}http://$CONTAINER_IP:3001${NC}"
+echo -e "  • Health Check: ${CYAN}http://$CONTAINER_IP:3001/health${NC}"
 echo ""
 
 log_info "Useful Commands:"
-echo "  • Enter container: ${CYAN}pct enter $VMID${NC}"
-echo "  • View logs: ${CYAN}pct exec $VMID -- pm2 logs${NC}"
-echo "  • Check status: ${CYAN}pct exec $VMID -- pm2 status${NC}"
-echo "  • Restart app: ${CYAN}pct exec $VMID -- pm2 restart budget-tracking-api${NC}"
-echo "  • Stop container: ${CYAN}pct stop $VMID${NC}"
-echo "  • Start container: ${CYAN}pct start $VMID${NC}"
+echo -e "  • Enter container: ${CYAN}pct enter $VMID${NC}"
+echo -e "  • View logs: ${CYAN}pct exec $VMID -- pm2 logs${NC}"
+echo -e "  • Check status: ${CYAN}pct exec $VMID -- pm2 status${NC}"
+echo -e "  • Restart app: ${CYAN}pct exec $VMID -- pm2 restart budget-tracking-api${NC}"
+echo -e "  • Stop container: ${CYAN}pct stop $VMID${NC}"
+echo -e "  • Start container: ${CYAN}pct start $VMID${NC}"
 echo ""
 
 if [ -n "$DB_CREDS" ]; then
     log_info "Database credentials saved in container at:"
-    echo "  ${CYAN}/root/.budget-tracking/credentials${NC}"
+    echo -e "  ${CYAN}/root/.budget-tracking/credentials${NC}"
     echo ""
 fi
 
