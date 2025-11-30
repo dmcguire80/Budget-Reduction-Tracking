@@ -251,10 +251,10 @@ REFRESH_TOKEN_EXPIRES_IN=7d
 CORS_ORIGIN=${CORS_ORIGIN}
 EOF
 
-# Run database migrations
+# Setup database schema
 if [ "$SKIP_DB" = false ]; then
-    log_step "Running database migrations"
-    npx prisma migrate deploy
+    log_step "Setting up database schema"
+    npx prisma db push --accept-data-loss
     npx prisma generate
 fi
 
