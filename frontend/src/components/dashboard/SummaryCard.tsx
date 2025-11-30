@@ -72,16 +72,16 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex-1">
             {/* Title */}
-            <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</p>
 
             {/* Value */}
-            <p className="text-2xl font-bold text-gray-900 mb-1">
+            <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
 
             {/* Subtitle */}
             {subtitle && (
-              <p className="text-xs text-gray-500 mb-2">{subtitle}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{subtitle}</p>
             )}
 
             {/* Trend */}
@@ -119,7 +119,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                 >
                   {Math.abs(trend.value).toFixed(1)}%
                 </span>
-                <span className="text-xs text-gray-500">{trend.label}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{trend.label}</span>
               </div>
             )}
           </div>

@@ -47,8 +47,8 @@ const ProgressOverview: React.FC<ProgressOverviewProps> = ({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Progress Overview</h2>
-          <span className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Progress Overview</h2>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
             {progressSummary?.accounts.length || 0} account
             {progressSummary?.accounts.length !== 1 ? 's' : ''}
           </span>
@@ -80,10 +80,10 @@ const ProgressOverview: React.FC<ProgressOverviewProps> = ({
         ) : (
           <div className="space-y-6">
             {/* Overall Progress */}
-            <div className="pb-6 border-b border-gray-200">
+            <div className="pb-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-gray-900">Overall Progress</h3>
-                <span className="text-sm font-bold text-primary-600">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Overall Progress</h3>
+                <span className="text-sm font-bold text-primary-600 dark:text-primary-400">
                   {formatPercentage(progressSummary.overallProgress / 100)}
                 </span>
               </div>
@@ -94,10 +94,10 @@ const ProgressOverview: React.FC<ProgressOverviewProps> = ({
                 />
               </div>
               <div className="flex items-center justify-between mt-2">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   {formatCurrency(progressSummary.totalCurrentDebt)} current
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   of {formatCurrency(progressSummary.totalInitialDebt)} initial
                 </span>
               </div>
@@ -109,15 +109,15 @@ const ProgressOverview: React.FC<ProgressOverviewProps> = ({
                 <button
                   key={account.id}
                   onClick={() => handleAccountClick(account.id)}
-                  className="w-full text-left group hover:bg-gray-50 p-2 rounded-lg transition-colors duration-200"
+                  className="w-full text-left group hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors duration-200"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900 truncate group-hover:text-primary-600 transition-colors">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                         {account.name}
                       </h4>
                     </div>
-                    <span className="text-sm font-semibold text-gray-700 ml-2">
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-2">
                       {formatPercentage(account.progress / 100)}
                     </span>
                   </div>
@@ -128,10 +128,10 @@ const ProgressOverview: React.FC<ProgressOverviewProps> = ({
                     />
                   </div>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       {formatCurrency(account.currentBalance)}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       / {formatCurrency(account.initialBalance)}
                     </span>
                   </div>

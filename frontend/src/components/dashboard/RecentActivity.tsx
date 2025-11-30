@@ -85,7 +85,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
   // Get color for amount
   const getAmountColor = (activity: Activity) => {
     const isPayment = activity.description?.includes('PAYMENT');
-    return isPayment ? 'text-success-600' : 'text-gray-900';
+    return isPayment ? 'text-success-600' : 'text-gray-900 dark:text-white';
   };
 
   // Group activities by date
@@ -131,7 +131,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
 
     return (
       <div className="mb-4 last:mb-0">
-        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+        <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
           {title}
         </h4>
         <div className="space-y-3">
@@ -139,13 +139,13 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
             <div key={activity.id} className="flex items-start space-x-3">
               {getActivityIcon(activity)}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {activity.accountName}
                 </p>
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {activity.description}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                   {formatRelativeTime(activity.date)}
                 </p>
               </div>
@@ -167,10 +167,10 @@ const RecentActivity: React.FC<RecentActivityProps> = ({
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
           <Link
             to={ROUTES.TRANSACTIONS}
-            className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+            className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
           >
             View All
           </Link>
