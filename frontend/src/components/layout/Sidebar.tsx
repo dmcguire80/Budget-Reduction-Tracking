@@ -18,8 +18,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     clsx(
       'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
       {
-        'bg-primary-50 text-primary-700 font-medium': isActive,
-        'text-gray-700 hover:bg-gray-100 hover:text-gray-900': !isActive,
+        'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-medium': isActive,
+        'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white': !isActive,
       }
     );
 
@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {/* Sidebar */}
       <aside
         className={clsx(
-          'fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200',
+          'fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700',
           'transform transition-transform duration-300 ease-in-out',
           'lg:translate-x-0',
           {
@@ -49,12 +49,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       >
         <div className="h-full flex flex-col">
           {/* Close button (mobile only) */}
-          <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200">
-            <span className="text-lg font-semibold text-gray-900">Menu</span>
+          <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <span className="text-lg font-semibold text-gray-900 dark:text-white">Menu</span>
             <button
               type="button"
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
               aria-label="Close menu"
             >
               <svg
@@ -133,7 +133,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               Analytics
             </NavLink>
 
-            <div className="pt-4 mt-4 border-t border-gray-200">
+            <div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
               <NavLink to={ROUTES.SETTINGS} className={navLinkClass} onClick={onClose}>
                 <svg
                   className={iconClass}
