@@ -54,7 +54,11 @@ let failedRequestsQueue: Array<{
  */
 api.interceptors.response.use(
   (response) => {
-    // Return the response data directly
+    // Unwrap the standard API response format: { success, message, data }
+    // Return the inner 'data' field so services can access it directly
+    if (response.data && typeof response.data === 'object' && 'data' in response.data) {
+      return { ...response, data: response.data.data };
+    }
     return response;
   },
   async (error: AxiosError<ApiError>) => {
