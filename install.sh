@@ -264,9 +264,15 @@ npm install
 # Configure frontend environment
 log_step "Configuring frontend environment"
 
-# Set API URL based on mode
+# Set API URL based on mode and environment
 if [ "$MODE" = "production" ]; then
-    VITE_API_URL="https://budget.yourdomain.com/api"
+    # Use container IP if available (Proxmox deployment)
+    if [ -n "$CONTAINER_IP" ]; then
+        VITE_API_URL="http://$CONTAINER_IP:3001"
+        log_info "Container deployment - using IP: $CONTAINER_IP"
+    else
+        VITE_API_URL="https://budget.yourdomain.com/api"
+    fi
 else
     VITE_API_URL="http://localhost:3001"
 fi

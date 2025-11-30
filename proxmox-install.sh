@@ -95,11 +95,12 @@ fi
 log_step "Finding available container ID"
 
 VMID=100
-while pvesh get /cluster/resources --type vm | grep -q "\"vmid\":$VMID"; do
+while pvesh get /cluster/resources --type vm | grep -q "\"vmid\":$VMID" || \
+      pvesh get /cluster/resources --type lxc | grep -q "\"vmid\":$VMID"; do
     VMID=$((VMID + 1))
 done
 
-log_info "✓ Using VMID: $VMID"
+log_info "✓ Using VMID: $VMID (scanned VMs and LXC containers cluster-wide)"
 
 # Create LXC container
 log_step "Creating LXC container"
@@ -168,7 +169,7 @@ log_step "Installing Budget Reduction Tracking"
 log_info "This will take 5-10 minutes..."
 echo ""
 
-pct exec $VMID -- bash -c "$(curl -fsSL https://raw.githubusercontent.com/dmcguire80/Budget-Reduction-Tracking/main/install.sh)"
+pct exec $VMID -- bash -c "export CONTAINER_IP='$CONTAINER_IP' && $(curl -fsSL https://raw.githubusercontent.com/dmcguire80/Budget-Reduction-Tracking/main/install.sh)"
 
 # Get database credentials
 log_step "Retrieving configuration"
