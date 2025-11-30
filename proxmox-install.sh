@@ -94,13 +94,27 @@ fi
 # Find next available VMID
 log_step "Finding available container ID"
 
-VMID=100
-# Get all VMIDs from cluster (both VMs and LXC containers on all nodes)
-USED_VMIDS=$(pvesh get /cluster/resources --output-format json | grep -oP '"vmid":\K\d+' | sort -n)
+# Get list of all used VMIDs across the cluster (both VMs and LXC)
+USED_VMIDS=$(pvesh get /cluster/resources --type vm --output-format json 2>/dev/null | grep -oP '"vmid":\K\d+' | sort -n)
 
-while echo "$USED_VMIDS" | grep -q "^${VMID}$"; do
-    VMID=$((VMID + 1))
-done
+# If cluster command fails, fall back to local check
+if [ -z "$USED_VMIDS" ]; then
+    log_warn "Unable to query cluster, checking local node only..."
+    for id in $(seq 100 999); do
+        if ! pct status "$id" &> /dev/null && ! qm status "$id" &> /dev/null; then
+            VMID=$id
+            break
+        fi
+    done
+else
+    # Check each ID against cluster-wide list
+    for id in $(seq 100 999); do
+        if ! echo "$USED_VMIDS" | grep -q "^${id}$"; then
+            VMID=$id
+            break
+        fi
+    done
+fi
 
 log_info "✓ Using VMID: $VMID (scanned VMs and LXC containers cluster-wide)"
 
