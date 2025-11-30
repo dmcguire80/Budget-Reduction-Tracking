@@ -41,7 +41,7 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
       const projectedData: (number | null)[] = [];
 
       // Separate actual and projected data
-      scenario.data.forEach((point, idx) => {
+      scenario.data.forEach((point) => {
         if (point.isProjected) {
           actualData.push(null);
           projectedData.push(point.balance);

@@ -13,6 +13,7 @@ export interface ErrorMessageProps {
   type?: AlertType;
   dismissible?: boolean;
   onDismiss?: () => void;
+  onRetry?: () => void;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ const ErrorMessage = ({
   type = 'danger',
   dismissible = false,
   onDismiss,
+  onRetry,
   className,
 }: ErrorMessageProps) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -100,6 +102,15 @@ const ErrorMessage = ({
 
       <div className="flex-1">
         <p className="text-sm font-medium">{message}</p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-2 text-sm font-medium underline hover:no-underline transition-all"
+          >
+            Try Again
+          </button>
+        )}
       </div>
 
       {dismissible && (

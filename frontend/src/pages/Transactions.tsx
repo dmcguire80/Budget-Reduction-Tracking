@@ -4,7 +4,6 @@
  * View all transactions across all accounts
  */
 
-import { useState } from 'react';
 import TransactionList from '@components/transactions/TransactionList';
 import Card from '@components/common/Card';
 
@@ -21,7 +20,7 @@ const Transactions = () => {
 
       {/* Transaction List */}
       <Card>
-        <TransactionList showAccountName={true} showFilters={true} />
+        <TransactionList showFilters={true} />
       </Card>
     </div>
   );

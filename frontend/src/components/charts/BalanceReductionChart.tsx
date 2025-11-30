@@ -46,6 +46,7 @@ export const BalanceReductionChart: React.FC<BalanceReductionChartProps> = ({
 
         return {
           ...dataset,
+          type: undefined,
           label: `${dataset.label} - Reduction`,
           data: reductionData,
           borderColor: colors[index],
@@ -65,6 +66,7 @@ export const BalanceReductionChart: React.FC<BalanceReductionChartProps> = ({
       // Option 2: Use inverted Y-axis (handled in chart options)
       const transformedDatasets = data.datasets.map((dataset, index) => ({
         ...dataset,
+        type: undefined,
         borderColor: colors[index],
         backgroundColor: colors[index] + '20',
         fill: true,

@@ -211,7 +211,7 @@ export const DEFAULT_AXIS_CONFIG = {
 /**
  * Get default line chart options
  */
-export function getLineChartOptions(config?: Partial<ChartOptions>): ChartOptions {
+export function getLineChartOptions(config?: Partial<ChartOptions<"line">>): ChartOptions<"line"> {
   return {
     ...DEFAULT_RESPONSIVE_CONFIG,
     plugins: {
@@ -247,13 +247,13 @@ export function getLineChartOptions(config?: Partial<ChartOptions>): ChartOption
     },
     animation: DEFAULT_ANIMATION_CONFIG,
     ...config,
-  } as ChartOptions;
+  } as ChartOptions<"line">;
 }
 
 /**
  * Get default bar chart options
  */
-export function getBarChartOptions(config?: Partial<ChartOptions>): ChartOptions {
+export function getBarChartOptions(config?: Partial<ChartOptions<"bar">>): ChartOptions<"bar"> {
   return {
     ...DEFAULT_RESPONSIVE_CONFIG,
     plugins: {
@@ -288,13 +288,13 @@ export function getBarChartOptions(config?: Partial<ChartOptions>): ChartOptions
     },
     animation: DEFAULT_ANIMATION_CONFIG,
     ...config,
-  } as ChartOptions;
+  } as ChartOptions<"bar">;
 }
 
 /**
  * Get default pie/doughnut chart options
  */
-export function getPieChartOptions(config?: Partial<ChartOptions>): ChartOptions {
+export function getPieChartOptions(config?: Partial<ChartOptions<"doughnut">>): ChartOptions<"doughnut"> {
   return {
     ...DEFAULT_RESPONSIVE_CONFIG,
     plugins: {
@@ -322,7 +322,7 @@ export function getPieChartOptions(config?: Partial<ChartOptions>): ChartOptions
     },
     animation: DEFAULT_ANIMATION_CONFIG,
     ...config,
-  } as ChartOptions;
+  } as ChartOptions<"doughnut">;
 }
 
 /**

@@ -9,7 +9,6 @@ import {
   ChartData,
   DateRange,
   PaymentScenario,
-  BalanceDataPoint,
   PaymentDistribution,
   ProgressDataPoint,
   ProjectionDataPoint,
@@ -235,7 +234,16 @@ export async function getProjection(
       }
     );
 
-    return response.data.data;
+    // Transform response to add scenario property to each data point
+    return {
+      scenarios: response.data.data.scenarios.map(scenario => ({
+        ...scenario,
+        data: scenario.data.map(point => ({
+          ...point,
+          scenario: scenario.label,
+        })),
+      })),
+    };
   } catch (error) {
     console.error('Error fetching projection data:', error);
     throw error;

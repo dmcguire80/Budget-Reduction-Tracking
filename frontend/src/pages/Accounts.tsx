@@ -14,7 +14,6 @@ import AccountModal from '@components/accounts/AccountModal';
 import { useAccounts } from '@hooks/useAccounts';
 import { AccountType } from '@/types';
 import { ACCOUNT_TYPES } from '@config/constants';
-import { formatAccountType } from '@utils/format';
 
 const Accounts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

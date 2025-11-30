@@ -172,7 +172,6 @@ export interface BalanceReductionChartProps {
 export interface InterestForecastChartProps {
   accountId: string;
   months?: number;
-  comparisonScenarios?: boolean;
 }
 
 /**

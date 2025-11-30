@@ -14,18 +14,3 @@ export { ChartLoadingSkeleton, CompactChartLoadingSkeleton } from './ChartLoadin
 export { ChartEmptyState, CompactChartEmptyState } from './ChartEmptyState';
 export { ChartExport } from './ChartExport';
 export { DateRangeSelector } from './DateRangeSelector';
-
-export default {
-  BalanceReductionChart,
-  InterestForecastChart,
-  PaymentDistributionChart,
-  ProgressChart,
-  ProjectionChart,
-  UtilizationChart,
-  ChartLoadingSkeleton,
-  CompactChartLoadingSkeleton,
-  ChartEmptyState,
-  CompactChartEmptyState,
-  ChartExport,
-  DateRangeSelector,
-};

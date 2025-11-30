@@ -19,7 +19,6 @@ export interface QuickTransactionFormProps {
 }
 
 const QuickTransactionForm = ({
-  accountId,
   onSubmit,
   isLoading = false,
 }: QuickTransactionFormProps) => {
@@ -44,7 +43,7 @@ const QuickTransactionForm = ({
   };
 
   const handleFormSubmit = (data: QuickTransactionFormValues) => {
-    onSubmit({ ...data, transactionType: selectedType });
+    onSubmit({ ...data, transactionType: selectedType as 'PAYMENT' | 'CHARGE' });
     reset();
   };
 

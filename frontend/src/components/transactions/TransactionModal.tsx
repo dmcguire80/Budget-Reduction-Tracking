@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import Modal from '@components/common/Modal';
 import TransactionForm from './TransactionForm';
 import { useCreateTransaction, useUpdateTransaction } from '@hooks/useTransactions';
-import { Transaction } from '@/types/transaction.types';
+import { Transaction, TransactionFormData } from '@/types/transaction.types';
 import { TransactionFormValues } from '@validators/transaction.schemas';
 import { SUCCESS_MESSAGES, DATE_FORMATS } from '@config/constants';
 
@@ -46,7 +46,7 @@ const TransactionModal = ({
           typeof data.transactionDate === 'string'
             ? data.transactionDate
             : format(data.transactionDate, DATE_FORMATS.INPUT),
-      };
+      } as TransactionFormData;
 
       if (mode === 'create') {
         await createMutation.mutateAsync({

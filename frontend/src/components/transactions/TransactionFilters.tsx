@@ -9,7 +9,6 @@ import { format, subDays, subMonths, startOfYear } from 'date-fns';
 import clsx from 'clsx';
 import { TransactionFilters as ITransactionFilters, TransactionType } from '@/types/transaction.types';
 import { TRANSACTION_TYPES, DATE_FORMATS } from '@config/constants';
-import Button from '@components/common/Button';
 
 export interface TransactionFiltersProps {
   filters: ITransactionFilters;

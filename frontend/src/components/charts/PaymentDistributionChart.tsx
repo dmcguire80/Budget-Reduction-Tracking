@@ -10,7 +10,7 @@ import { PaymentDistributionChartProps, DateRange } from '../../types/chart.type
 import { usePaymentDistributionData } from '../../hooks/useChartData';
 import { getPieChartOptions, DEFAULT_CHART_COLORS } from '../../config/chartDefaults';
 import { formatCurrencyLabel } from '../../utils/chart.utils';
-import ChartLoadingSkeleton, { CompactChartLoadingSkeleton } from './ChartLoadingSkeleton';
+import { CompactChartLoadingSkeleton } from './ChartLoadingSkeleton';
 import ChartEmptyState from './ChartEmptyState';
 import ChartExport from './ChartExport';
 import DateRangeSelector from './DateRangeSelector';

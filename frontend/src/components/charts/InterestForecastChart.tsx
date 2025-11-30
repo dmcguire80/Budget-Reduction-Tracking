@@ -17,7 +17,6 @@ import ChartExport from './ChartExport';
 export const InterestForecastChart: React.FC<InterestForecastChartProps> = ({
   accountId,
   months = 12,
-  comparisonScenarios = true,
 }) => {
   const [timelineMonths, setTimelineMonths] = useState(months);
   const chartId = 'interest-forecast-chart';

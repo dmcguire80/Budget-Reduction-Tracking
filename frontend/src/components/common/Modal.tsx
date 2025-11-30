@@ -4,7 +4,7 @@
  * Reusable modal dialog with backdrop, close button, and customizable size
  */
 
-import { useEffect, useRef, Fragment } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 

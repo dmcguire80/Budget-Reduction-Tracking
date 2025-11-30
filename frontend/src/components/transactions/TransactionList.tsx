@@ -7,7 +7,6 @@
 import { useState } from 'react';
 import { Transaction, TransactionFilters } from '@/types/transaction.types';
 import { useAccountTransactions, useAllTransactions, useDeleteTransaction } from '@hooks/useTransactions';
-import { formatAccountType } from '@utils/format';
 import { PAGINATION } from '@config/constants';
 import TransactionItem from './TransactionItem';
 import TransactionFiltersComponent from './TransactionFilters';
@@ -17,14 +16,12 @@ import Button from '@components/common/Button';
 
 export interface TransactionListProps {
   accountId?: string;
-  showAccountName?: boolean;
   showFilters?: boolean;
   limit?: number;
 }
 
 const TransactionList = ({
   accountId,
-  showAccountName = false,
   showFilters = true,
   limit = PAGINATION.DEFAULT_LIMIT,
 }: TransactionListProps) => {
@@ -152,13 +149,8 @@ const TransactionList = ({
               ? 'Try adjusting your filters to see more results.'
               : 'Start tracking your transactions by adding your first one.'
           }
-          action={
-            hasFilters ? (
-              <Button variant="primary" onClick={handleClearFilters}>
-                Clear Filters
-              </Button>
-            ) : undefined
-          }
+          actionLabel={hasFilters ? 'Clear Filters' : undefined}
+          onAction={hasFilters ? handleClearFilters : undefined}
         />
       </div>
     );
